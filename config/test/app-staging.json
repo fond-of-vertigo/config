@@ -1,0 +1,9 @@
+{
+    "name": "Another Service",
+    "budget": -15.11,
+    "isTest": false,
+    "database": {
+        "name": "stagingDB",
+        "port": 1511
+    }
+}

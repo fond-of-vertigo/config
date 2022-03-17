@@ -1,0 +1,14 @@
+{
+    "name": "Awesome Service",
+    "budget": 47.11,
+    "isTest": true,
+    "database": {
+        "name": "testDB",
+        "port": 4711
+    },
+    "items": [
+        "Item 1",
+        "Item 2",
+        "Item 3"
+    ]
+}
