@@ -1,4 +1,4 @@
-module config.go
+module github.com/fond-of/config.go
 
 go 1.17
 
