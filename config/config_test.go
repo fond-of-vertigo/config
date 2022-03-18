@@ -14,14 +14,16 @@ type testConfig struct {
 		Name string
 		Port int
 	}
-	Items []string
+	Items  []string
+	Secret EnvVariable
 }
 
 func TestConfig_LoadFromWithProfile(t *testing.T) {
 	tests := []struct {
-		name     string
-		profile  string
-		expected testConfig
+		name         string
+		profile      string
+		envVariables map[string]string
+		expected     testConfig
 	}{
 		{
 			name: "Default case",
@@ -36,7 +38,11 @@ func TestConfig_LoadFromWithProfile(t *testing.T) {
 					Name: "testDB",
 					Port: 4711,
 				},
-				Items: []string{"Item 1", "Item 2", "Item 3"},
+				Items:  []string{"Item 1", "Item 2", "Item 3"},
+				Secret: "P@SSW0RD",
+			},
+			envVariables: map[string]string{
+				"SECRET": "P@SSW0RD",
 			},
 		},
 		{
@@ -58,6 +64,12 @@ func TestConfig_LoadFromWithProfile(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			for key, value := range tt.envVariables {
+				if err := os.Setenv(key, value); err != nil {
+					t.Fatal(err)
+				}
+			}
+
 			cfg := testConfig{}
 
 			err := LoadFromWithProfile("test", tt.profile, &cfg)
@@ -89,7 +101,9 @@ func TestConfig_CurrentProfile(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			os.Setenv(envKeyProfile, tt.expected)
+			if err := os.Setenv(envKeyProfile, tt.expected); err != nil {
+				t.Fatal(err)
+			}
 
 			actual := CurrentProfile()
 
@@ -124,9 +138,13 @@ func TestConfig_MustGetEnv(t *testing.T) {
 					t.Fatalf("Expected error %v, got error %v", tt.wantError, errorOccurred)
 				}
 			}()
-			os.Unsetenv("TEST_KEY")
+			if err := os.Unsetenv("TEST_KEY"); err != nil {
+				t.Fatal(err)
+			}
 			if tt.setKey {
-				os.Setenv("TEST_KEY", "I am here...")
+				if err := os.Setenv("TEST_KEY", "I am here..."); err != nil {
+					t.Fatal(err)
+				}
 			}
 
 			actual := MustGetEnv("TEST_KEY")
