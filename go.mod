@@ -1,4 +1,4 @@
-module github.com/fond-of/config.go
+module github.com/fond-of-vertigo/config
 
 go 1.17
 

@@ -32,7 +32,7 @@ directly into json (secrets). If the variable is not set an error will be raised
 ```go
 package myPackage
 
-import "github.com/fond-of-vertigo/config/config"
+import "github.com/fond-of-vertigo/config"
 
 // serviceConfig defines a configuration struct
 type serviceConfig struct {
