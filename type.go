@@ -16,3 +16,10 @@ func (e *EnvVariable) UnmarshalJSON(data []byte) error {
 	*e = EnvVariable(MustGetEnv(variableName))
 	return nil
 }
+
+func (e *EnvVariable) String() string {
+	if e == nil {
+		return ""
+	}
+	return string(*e)
+}
