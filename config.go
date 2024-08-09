@@ -3,9 +3,10 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path"
+	"strings"
 )
 
 const (
@@ -24,7 +25,7 @@ func LoadFromWithProfile(configDirectory, profile string, configStruct interface
 }
 
 func CurrentProfile() string {
-	return os.Getenv(envKeyProfile)
+	return strings.ToLower(os.Getenv(envKeyProfile))
 }
 
 func MustGetEnv(key string) string {
@@ -51,7 +52,7 @@ func readJSONConfigFile(fileName string, configStruct interface{}) error {
 	}
 	defer cfgFile.Close()
 
-	data, err := ioutil.ReadAll(cfgFile)
+	data, err := io.ReadAll(cfgFile)
 	if err != nil {
 		return err
 	}
